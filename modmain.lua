@@ -27,7 +27,7 @@ local function Grow(inst)
   	end
 
   	if HasLeader(inst) then
-  		total_growths = math.floor(total_growths / 2)
+  		total_growths = math.floor(total_growths / 4)
   	end
 
   	local growths_left = total_growths - inst.__growths
