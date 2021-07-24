@@ -35,7 +35,7 @@ local function Grow(inst)
 	if inst.__origin_maxhealth ~= nil and inst.__growths ~= nil then
 		local delta_health = health_rate * growths_left * inst.__origin_maxhealth
 
-		print("DELTA HEALTH ", inst, delta_health)
+		-- print("DELTA HEALTH ", inst, delta_health)
 		local current_percent = inst.components.health:GetPercent()
 		inst.components.health.maxhealth = math.max(
 			inst.__origin_maxhealth,
@@ -48,7 +48,7 @@ local function Grow(inst)
 	if inst.__origin_damagemultipler then
 		local delta_multiplier = damage_rate * growths_left * inst.__origin_damagemultipler
 
-		print("DELTA DAMAGE MULT ", inst, delta_multiplier)
+		-- print("DELTA DAMAGE MULT ", inst, delta_multiplier)
 		local basemultiplier = inst.components.combat.damagemultiplier or 1
 		inst.components.combat.damagemultiplier =
 			math.max(inst.__origin_damagemultipler, basemultiplier + delta_multiplier)
@@ -57,7 +57,7 @@ local function Grow(inst)
 	if inst.__origin_areahitdamagepercent ~= nil and inst.components.combat.areahitdamagepercent ~= nil then
 		local delta_multiplier = damage_rate * growths_left * inst.__origin_areahitdamagepercent
 
-		print("DELTA AREA DAMAGE MULT ", inst, delta_multiplier)
+		-- print("DELTA AREA DAMAGE MULT ", inst, delta_multiplier)
 		inst.components.combat.areahitdamagepercent = math.max(
 			inst.__origin_areahitdamagepercent,
 			inst.components.combat.areahitdamagepercent + delta_multiplier
@@ -70,12 +70,12 @@ local function OnCyclesChanged(inst, cycles)
 end
 
 local function OnStopFollowing(inst)
-	print("STOP FOLLOWING")
+	-- print("STOP FOLLOWING")
 	Grow(inst)
 end
 
 local function OnStartFollowing(inst)
-	print("START FOLLOWING")
+	-- print("START FOLLOWING")
 	Grow(inst)
 end
 
