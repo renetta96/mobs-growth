@@ -15,6 +15,10 @@ local function HasLeader(inst)
 end
 
 local function Grow(inst)
+	if not inst:IsValid() then
+		return
+	end
+
 	local cycles = GLOBAL.TheWorld.state.cycles
   	local total_growths = math.floor(cycles / growth_interval)
 
@@ -32,37 +36,41 @@ local function Grow(inst)
 
   	local growths_left = total_growths - inst.__growths
 
-	if inst.__origin_maxhealth ~= nil and inst.__growths ~= nil then
-		local delta_health = health_rate * growths_left * inst.__origin_maxhealth
+  	if inst.components.health then
+  		if inst.__origin_maxhealth ~= nil and inst.__growths ~= nil then
+			local delta_health = health_rate * growths_left * inst.__origin_maxhealth
 
-		-- print("DELTA HEALTH ", inst, delta_health)
-		local current_percent = inst.components.health:GetPercent()
-		inst.components.health.maxhealth = math.max(
-			inst.__origin_maxhealth,
-			inst.components.health.maxhealth + delta_health
-		)
-		inst.components.health.currenthealth = current_percent * inst.components.health.maxhealth
-		inst.__growths = total_growths
-	end
+			-- print("DELTA HEALTH ", inst, delta_health)
+			local current_percent = inst.components.health:GetPercent()
+			inst.components.health.maxhealth = math.max(
+				inst.__origin_maxhealth,
+				inst.components.health.maxhealth + delta_health
+			)
+			inst.components.health.currenthealth = current_percent * inst.components.health.maxhealth
+			inst.__growths = total_growths
+		end
+  	end
 
-	if inst.__origin_damagemultipler then
-		local delta_multiplier = damage_rate * growths_left * inst.__origin_damagemultipler
+  	if inst.components.combat then
+  		if inst.__origin_damagemultipler then
+			local delta_multiplier = damage_rate * growths_left * inst.__origin_damagemultipler
 
-		-- print("DELTA DAMAGE MULT ", inst, delta_multiplier)
-		local basemultiplier = inst.components.combat.damagemultiplier or 1
-		inst.components.combat.damagemultiplier =
-			math.max(inst.__origin_damagemultipler, basemultiplier + delta_multiplier)
-	end
+			-- print("DELTA DAMAGE MULT ", inst, delta_multiplier)
+			local basemultiplier = inst.components.combat.damagemultiplier or 1
+			inst.components.combat.damagemultiplier =
+				math.max(inst.__origin_damagemultipler, basemultiplier + delta_multiplier)
+		end
 
-	if inst.__origin_areahitdamagepercent ~= nil and inst.components.combat.areahitdamagepercent ~= nil then
-		local delta_multiplier = damage_rate * growths_left * inst.__origin_areahitdamagepercent
+		if inst.__origin_areahitdamagepercent ~= nil and inst.components.combat.areahitdamagepercent ~= nil then
+			local delta_multiplier = damage_rate * growths_left * inst.__origin_areahitdamagepercent
 
-		-- print("DELTA AREA DAMAGE MULT ", inst, delta_multiplier)
-		inst.components.combat.areahitdamagepercent = math.max(
-			inst.__origin_areahitdamagepercent,
-			inst.components.combat.areahitdamagepercent + delta_multiplier
-		)
-	end
+			-- print("DELTA AREA DAMAGE MULT ", inst, delta_multiplier)
+			inst.components.combat.areahitdamagepercent = math.max(
+				inst.__origin_areahitdamagepercent,
+				inst.components.combat.areahitdamagepercent + delta_multiplier
+			)
+		end
+  	end
 end
 
 local function OnCyclesChanged(inst, cycles)
