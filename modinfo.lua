@@ -2,7 +2,7 @@
 name = "Mobs Growth"
 description = ""
 author = "Zeta"
-version = "1.0.1.2" -- This is the version of the template. Change it to your own number.
+version = "1.0.2" -- This is the version of the template. Change it to your own number.
 
 -- This is the URL name of the mod's thread on the forum; the part after the ? and before the first & in the url
 forumthread = ""
@@ -69,6 +69,25 @@ configuration_options = {
 		hover = 'How much health mobs grow each interval'
 	},
 	{
+		name = 'MOB_HEALTH_GROWTH_CAP',
+		label = 'Mob health growth cap',
+		options = {
+			{ description = '50%', data = 0.5 },
+			{ description = '100%', data = 1 },
+			{ description = '150%', data = 1.5 },
+			{ description = '200%', data = 2 },
+			{ description = '250%', data = 2.5 },
+			{ description = '300%', data = 3 },
+			{ description = '350%', data = 3.5 },
+			{ description = '400%', data = 4 },
+			{ description = '450%', data = 4.5 },
+			{ description = '500%', data = 5 },
+			{ description = 'Unlimited', data = -1 }
+		},
+		default = 1,
+		hover = 'Max mob health growth'
+	},
+	{
 		name = 'MOB_DAMAGE_GROWTH_RATE',
 		label = 'Mob damage growth rate',
 		options = {
@@ -85,6 +104,25 @@ configuration_options = {
 		},
 		default = 0.2,
 		hover = 'How much damage mobs grow each interval'
+	},
+	{
+		name = 'MOB_DAMAGE_GROWTH_CAP',
+		label = 'Mob damage growth cap',
+		options = {
+			{ description = '50%', data = 0.5 },
+			{ description = '100%', data = 1 },
+			{ description = '150%', data = 1.5 },
+			{ description = '200%', data = 2 },
+			{ description = '250%', data = 2.5 },
+			{ description = '300%', data = 3 },
+			{ description = '350%', data = 3.5 },
+			{ description = '400%', data = 4 },
+			{ description = '450%', data = 4.5 },
+			{ description = '500%', data = 5 },
+			{ description = 'Unlimited', data = -1 }
+		},
+		default = 1,
+		hover = 'Max mob damage growth'
 	},
 	{
 		name = 'BOSS_HEALTH_GROWTH_RATE',
@@ -105,6 +143,25 @@ configuration_options = {
 		hover = 'How much health bosses grow each interval'
 	},
 	{
+		name = 'BOSS_HEALTH_GROWTH_CAP',
+		label = 'Boss health growth cap',
+		options = {
+			{ description = '50%', data = 0.5 },
+			{ description = '100%', data = 1 },
+			{ description = '150%', data = 1.5 },
+			{ description = '200%', data = 2 },
+			{ description = '250%', data = 2.5 },
+			{ description = '300%', data = 3 },
+			{ description = '350%', data = 3.5 },
+			{ description = '400%', data = 4 },
+			{ description = '450%', data = 4.5 },
+			{ description = '500%', data = 5 },
+			{ description = 'Unlimited', data = -1 }
+		},
+		default = 1,
+		hover = 'Max boss health growth'
+	},
+	{
 		name = 'BOSS_DAMAGE_GROWTH_RATE',
 		label = 'Boss damage growth rate',
 		options = {
@@ -122,4 +179,35 @@ configuration_options = {
 		default = 0.2,
 		hover = 'How much damage bosses grow each interval'
 	},
+	{
+		name = 'BOSS_DAMAGE_GROWTH_CAP',
+		label = 'Boss damage growth cap',
+		options = {
+			{ description = '50%', data = 0.5 },
+			{ description = '100%', data = 1 },
+			{ description = '150%', data = 1.5 },
+			{ description = '200%', data = 2 },
+			{ description = '250%', data = 2.5 },
+			{ description = '300%', data = 3 },
+			{ description = '350%', data = 3.5 },
+			{ description = '400%', data = 4 },
+			{ description = '450%', data = 4.5 },
+			{ description = '500%', data = 5 },
+			{ description = 'Unlimited', data = -1 }
+		},
+		default = 1,
+		hover = 'Max boss damage growth'
+	},
+	{
+		name = 'FOLLOWER_GROWTH_PERCENTAGE',
+		label = 'Follower growth percentage',
+		options = {
+			{ description = '25%', data = 0.25 },
+			{ description = '50%', data = 0.5 },
+			{ description = '75%', data = 0.75 },
+			{ description = '100%', data = 1 },
+		},
+		default = 0.25,
+		hover = 'How much growth followers get compared to other mobs'
+	}
 }

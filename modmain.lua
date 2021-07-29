@@ -2,10 +2,22 @@ local require = GLOBAL.require
 local math = GLOBAL.math
 
 local growth_interval = GetModConfigData('GROWTH_INTERVAL')
+
 local mob_health_grow_rate = GetModConfigData('MOB_HEALTH_GROWTH_RATE')
+local mob_health_grow_cap = GetModConfigData('MOB_HEALTH_GROWTH_CAP')
 local mob_damage_grow_rate = GetModConfigData('MOB_DAMAGE_GROWTH_RATE')
+local mob_damage_grow_cap = GetModConfigData('MOB_DAMAGE_GROWTH_CAP')
+
 local boss_health_grow_rate = GetModConfigData('BOSS_HEALTH_GROWTH_RATE')
+local boss_health_grow_cap = GetModConfigData('BOSS_HEALTH_GROWTH_CAP')
 local boss_damage_grow_rate = GetModConfigData('BOSS_DAMAGE_GROWTH_RATE')
+local boss_damage_grow_cap = GetModConfigData('BOSS_DAMAGE_GROWTH_CAP')
+
+local follower_grow_percent = GetModConfigData('FOLLOWER_GROWTH_PERCENTAGE')
+
+local follower_list = {
+	abigail = true
+}
 
 local function HasLeader(inst)
 	return inst.components.follower
@@ -24,21 +36,37 @@ local function Grow(inst)
 
   	local health_rate = mob_health_grow_rate
   	local damage_rate = mob_damage_grow_rate
+  	local health_cap = mob_health_grow_cap
+  	local damage_cap = mob_damage_grow_cap
 
   	if inst:HasTag("epic") then
   		health_rate = boss_health_grow_rate
   		damage_rate = boss_damage_grow_rate
+  		health_cap = boss_health_grow_cap
+  		damage_cap = boss_damage_grow_cap
   	end
 
-  	if HasLeader(inst) then
-  		total_growths = math.floor(total_growths / 4)
+  	if follower_list[inst.prefab] or HasLeader(inst) then
+  		total_growths = math.floor(total_growths * follower_grow_percent)
+  		health_cap = health_cap * follower_grow_percent
+  		damage_cap = damage_cap * follower_grow_percent
   	end
 
   	local growths_left = total_growths - inst.__growths
 
+  	local delta_health_rate = health_rate * growths_left
+  	if health_cap >= 0 then
+  		delta_health_rate = math.min(delta_health_rate, math.max(0, health_cap - inst.__growths * health_rate))
+  	end
+
+  	local delta_damage_rate = damage_rate * growths_left
+  	if damage_cap >= 0 then
+  		delta_damage_rate = math.min(delta_damage_rate, math.max(0, damage_cap - inst.__growths * damage_rate))
+  	end
+
   	if inst.components.health then
   		if inst.__origin_maxhealth ~= nil and inst.__growths ~= nil then
-			local delta_health = health_rate * growths_left * inst.__origin_maxhealth
+			local delta_health = delta_health_rate * inst.__origin_maxhealth
 
 			-- print("DELTA HEALTH ", inst, delta_health)
 			local current_percent = inst.components.health:GetPercent()
@@ -53,7 +81,7 @@ local function Grow(inst)
 
   	if inst.components.combat then
   		if inst.__origin_damagemultipler then
-			local delta_multiplier = damage_rate * growths_left * inst.__origin_damagemultipler
+			local delta_multiplier = delta_damage_rate * inst.__origin_damagemultipler
 
 			-- print("DELTA DAMAGE MULT ", inst, delta_multiplier)
 			local basemultiplier = inst.components.combat.damagemultiplier or 1
@@ -62,7 +90,7 @@ local function Grow(inst)
 		end
 
 		if inst.__origin_areahitdamagepercent ~= nil and inst.components.combat.areahitdamagepercent ~= nil then
-			local delta_multiplier = damage_rate * growths_left * inst.__origin_areahitdamagepercent
+			local delta_multiplier = delta_damage_rate * inst.__origin_areahitdamagepercent
 
 			-- print("DELTA AREA DAMAGE MULT ", inst, delta_multiplier)
 			inst.components.combat.areahitdamagepercent = math.max(
@@ -87,9 +115,7 @@ local function OnStartFollowing(inst)
 	Grow(inst)
 end
 
-local blacklist = {
-	abigail = true
-}
+local blacklist = {}
 
 local function MakePrefabGrowth(inst)
 	if not GLOBAL.TheWorld.ismastersim then
