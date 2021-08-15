@@ -178,6 +178,7 @@ local function MakePrefabGrowth(inst)
 
 	inst:WatchWorldState("cycles", OnCyclesChanged)
 	inst:ListenForEvent("stopfollowing", OnStopFollowing)
+	inst:ListenForEvent("loseloyalty", OnStopFollowing)
 	inst:ListenForEvent("startfollowing", OnStartFollowing)
 end
 
